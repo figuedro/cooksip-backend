@@ -40,6 +40,8 @@ model User {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  role      String   @default("USER")
+  imageUrl  String?
 
   recipes Recipe[]
 }
@@ -51,6 +53,7 @@ model Recipe {
   updatedAt DateTime @updatedAt
   slug      String   @unique
   approved  Boolean  @default(false)
+  imageUrl  String?
 
   author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String
