@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const createRecipeSchema = z.object({
-  title: z.string(),
+  title: z.string().min(3, { message: "O título deve conter pelo menos 3 caracteres" }),
   author: z.string(),
   steps: z.array(
     z.object({
@@ -16,5 +16,12 @@ export const createRecipeSchema = z.object({
       quantity: z.number(),
     }),
   ),
-  tags: z.array(z.string()),
+  tags: z.array(z.enum([ "BREAKFAST",
+  "LUNCH",
+  "DINNER",
+  "SNACK",
+  "DESSERT",
+  "DRINK",
+  "APPETIZER",
+  "SANDWICH"])),
 });

@@ -2,6 +2,22 @@ import { Request, Response } from "express";
 import * as authService from "../services/authService";
 import { authSignInSchema, authLoginSchema } from "../schemas/auth.schema";
 
+export const createUser = async (req: Request, res: Response) => {
+  const parsedUser = authSignInSchema.safeParse(req.body);
+
+  if (!parsedUser.success) {
+    return res.status(400).json({ message: "Email inválido" });
+  }
+
+  const user = await authService.createUser(parsedUser.data);
+
+  if (!user) {
+    return res.status(409).json({ message: "Usuário já existe" });
+  }
+
+  res.status(201).json(user);
+};
+
 export const loginUser = async (req: Request, res: Response) => {
   const parsedUser = authLoginSchema.safeParse(req.body);
 
@@ -19,7 +35,7 @@ export const loginUser = async (req: Request, res: Response) => {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
-    maxAge: 24 * 60 * 60 * 1000, // 1 dia em ms
+    maxAge: 24 * 60 * 60 * 1000,
   });
 
   res.status(200).json({ user: result.user, token: result.token });
@@ -33,20 +49,4 @@ export const logoutUser = async (req: Request, res: Response) => {
   });
 
   res.status(200).json({ message: "Logout bem-sucedido" });
-};
-
-export const createUser = async (req: Request, res: Response) => {
-  const parsedUser = authSignInSchema.safeParse(req.body);
-
-  if (!parsedUser.success) {
-    return res.status(400).json({ message: parsedUser.error.flatten });
-  }
-
-  const user = await authService.createUser(parsedUser.data);
-
-  if (!user) {
-    return res.status(409).json({ message: "Usuário já existe" });
-  }
-
-  res.status(201).json(user);
 };
