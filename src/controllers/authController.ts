@@ -6,7 +6,7 @@ export const createUser = async (req: Request, res: Response) => {
   const parsedUser = authSignInSchema.safeParse(req.body);
 
   if (!parsedUser.success) {
-    return res.status(400).json({ message: "Email inválido" });
+    return res.status(400).json({ errors: parsedUser.error.issues.map((i) => i.message) });
   }
 
   const user = await authService.createUser(parsedUser.data);

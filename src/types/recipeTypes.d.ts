@@ -8,17 +8,17 @@ export interface Recipe {
   tags: string[];
   createdAt: Date;
   updatedAt: Date;
-  imageFile: string;
+  imageUrl: string | null;
 }
 
 export interface Step {
-  order: number;
-  description: string;
+  stepOrder: number;
+  content: string;
 }
 
 export interface Ingredient {
   name: string;
-  quantity: string;
+  quantity: number;
   unit: string;
 }
 

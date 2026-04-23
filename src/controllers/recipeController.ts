@@ -1,23 +1,34 @@
 import { Request, Response } from "express";
 import * as recipeService from "../services/recipeService";
 import { generateSlug } from "../utils/generateSlug";
-import { CreateRecipeDTO } from "../types/recipeTypes";
+import { uploadToS3 } from "../utils/uploadToS3";
 
 export const getRecipes = async (req: Request, res: Response) => {
   // Implement get all recipes logic here
 };
 
 export const createRecipe = async (req: Request, res: Response) => {
+  try {
+    const { title, steps, ingredients, tags } = req.body;
+    const authorId = req.user.userId;
 
-  const { title, steps, ingredients, tags } = req.body as CreateRecipeDTO;
+    const imageUrl = req.file ? await uploadToS3(req.file) : null;
+    const slug = generateSlug(title);
 
-  const author = req.user?.userId
+    const recipe = await recipeService.createRecipe({
+      title,
+      authorId,
+      steps: JSON.parse(steps),
+      ingredients: JSON.parse(ingredients),
+      tags: JSON.parse(tags),
+      slug,
+      imageUrl,
+    });
 
-  // const imageUrl = 
-
-  const slug = generateSlug(title);
-
-  // const recipe = await recipeService.createRecipe({ title, author, steps, ingredients, tags });
+    res.status(201).json(recipe);
+  } catch (error) {
+    res.status(500).json({ message: "Erro ao criar receita" });
+  }
 };
 
 export const updateRecipe = async (req: Request, res: Response) => {

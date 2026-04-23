@@ -5,14 +5,14 @@ export const authSignInSchema = z.object({
   email: z.email(),
   password: z
     .string()
-    .includes(" ", { message: "A senha não pode conter espaços" })
-    .min(8, { message: "A senha deve conter pelo menos 8 caracteres" }),
+    .min(8, { message: "A senha deve conter pelo menos 8 caracteres" })
+    .refine((val) => !val.includes(" "), { message: "A senha não pode conter espaços" }),
 });
 
 export const authLoginSchema = z.object({
   email: z.email(),
   password: z
     .string()
-    .includes(" ", { message: "A senha não pode conter espaços" })
-    .min(8, { message: "A senha deve conter pelo menos 8 caracteres" }),
+    .min(8, { message: "A senha deve conter pelo menos 8 caracteres" })
+    .refine((val) => !val.includes(" "), { message: "A senha não pode conter espaços" }),
 });

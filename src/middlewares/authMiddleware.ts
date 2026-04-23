@@ -12,7 +12,11 @@ declare global {
 const JWT_SECRET = process.env.JWT_SECRET;
 
 export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies?.token;
+  const isDev = process.env.NODE_ENV === "development";
+
+  const token = isDev
+    ? req.headers.authorization?.split(" ")[1]
+    : req.cookies?.token;
 
   if (!token) {
     return res.status(401).json({ message: "Token de autenticação ausente" });

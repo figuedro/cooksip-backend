@@ -3,13 +3,13 @@ import { createRecipe, deleteRecipe, getRecipes, getRecipesById, updateRecipe } 
 import { authMiddleware } from "../middlewares/authMiddleware";
 import multer from "multer";
 
-const upload = multer();
+const upload = multer({ storage: multer.memoryStorage() });
 
 const router = express.Router();
 
 router.get("/", getRecipes);
 router.get("/:id", getRecipesById);
-router.post("/", authMiddleware, createRecipe);
+router.post("/", authMiddleware, upload.single("image"), createRecipe);
 router.put("/:id", authMiddleware, updateRecipe);
 router.delete("/:id", authMiddleware, deleteRecipe);
 
