@@ -14,6 +14,7 @@ Built with **Node.js**, **Express**, **TypeScript**, and **Prisma ORM**.
 * **TypeScript**
 * **Prisma ORM**
 * **PostgreSQL**
+* **Amazon S3**
 
 ---
 
