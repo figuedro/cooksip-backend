@@ -37,7 +37,7 @@ export const loginUser = async ({ email, password }: { email: string; password: 
     return null;
   }
 
-  const jwtToken = generateJwtToken({ userId: user.id, email: user.email });
+  const jwtToken = generateJwtToken({ userId: user.id, email: user.email, role: user.role });
 
   const { password: _, ...userWithoutPassword } = user;
 

@@ -4,6 +4,7 @@ import type { StringValue } from "ms";
 interface JwtPayload {
   userId: string;
   email: string;
+  role: string;
 }
 
 const JWT_SECRET = process.env.JWT_SECRET;
